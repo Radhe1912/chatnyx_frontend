@@ -7,7 +7,7 @@ export const SocketProvider = ({ children }) => {
     const [socket, setSocket] = useState(null);
 
     useEffect(() => {
-        const s = io(import.meta.env.VITE_BACKEND_URL || "http://localhost:5000", {
+        const s = io(import.meta.env.VITE_BACKEND_URL || "https://chatnyx-backend.onrender.com", {
             auth: {
                 token: localStorage.getItem("token"),
             },

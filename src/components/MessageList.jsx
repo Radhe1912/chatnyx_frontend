@@ -11,6 +11,8 @@ export default function MessageList({ chatId }) {
     const [messages, setMessages] = useState([]);
     const bottomRef = useRef(null);
 
+    const API = import.meta.env.VITE_BACKEND_URL;
+
     useEffect(() => {
         if (!chatId || !socket) return;
 
@@ -103,7 +105,7 @@ export default function MessageList({ chatId }) {
                             {msg.type === "image" && (
                                 <div className="message-image">
                                     <img
-                                        src={`http://localhost:5000${msg.content}`}
+                                        src={`${API}${msg.content}`}
                                         alt="Message attachment"
                                     />
                                 </div>

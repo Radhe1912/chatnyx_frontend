@@ -1,14 +1,14 @@
 // src/api/message.api.js
 import axios from "./axios";
 
-const API = "http://localhost:5000";
+const API = import.meta.env.VITE_BACKEND_URL;
 
 export const getMessagesByChat = (chatId, limit = 20, offset = 0) => {
     return axios.get(`/messages/${chatId}?limit=${limit}&offset=${offset}`);
 };
 
 export const getMessages = (chatId) =>
-    axios.get(`http://localhost:5000/messages/${chatId}`);
+    axios.get(`${API}/messages/${chatId}`);
 
 export const uploadMedia = (formData) => {
     const token = localStorage.getItem("token");
