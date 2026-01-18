@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import { getMessagesByChat } from "../api/message.api";
 import { useSocket } from "../context/SocketContext";
 import { useAuth } from "../context/AuthContext";
-import "./MessageList.css"
+import "./MessageList.css";
 
 export default function MessageList({ chatId }) {
     const { socket } = useSocket();
@@ -10,8 +10,6 @@ export default function MessageList({ chatId }) {
 
     const [messages, setMessages] = useState([]);
     const bottomRef = useRef(null);
-
-    const API = import.meta.env.VITE_BACKEND_URL;
 
     useEffect(() => {
         if (!chatId || !socket) return;
@@ -47,7 +45,7 @@ export default function MessageList({ chatId }) {
     useEffect(() => {
         if (!socket) return;
 
-        const onNewMessage = msg => {
+        const onNewMessage = (msg) => {
             if (msg.chat_id !== chatId) return;
 
             setMessages(prev => [
@@ -57,8 +55,8 @@ export default function MessageList({ chatId }) {
                     status:
                         msg.sender_id === auth.user.id
                             ? "sent"
-                            : "delivered"
-                }
+                            : "delivered",
+                },
             ]);
         };
 
@@ -95,9 +93,9 @@ export default function MessageList({ chatId }) {
                 return (
                     <div
                         key={msg.id}
-                        className={`message-container ${isMe ? 'message-right' : 'message-left'}`}
+                        className={`message-container ${isMe ? "message-right" : "message-left"}`}
                     >
-                        <div className={`message-bubble ${isMe ? 'message-bubble-me' : 'message-bubble-other'}`}>
+                        <div className={`message-bubble ${isMe ? "message-bubble-me" : "message-bubble-other"}`}>
                             {msg.type === "text" && (
                                 <div className="message-text">{msg.content}</div>
                             )}
@@ -105,8 +103,9 @@ export default function MessageList({ chatId }) {
                             {msg.type === "image" && (
                                 <div className="message-image">
                                     <img
-                                        src={`${API}${msg.content}`}
-                                        alt="Message attachment"
+                                        src={msg.content}
+                                        alt="attachment"
+                                        loading="lazy"
                                     />
                                 </div>
                             )}
@@ -114,10 +113,10 @@ export default function MessageList({ chatId }) {
                             {isMe && (
                                 <div className="message-meta">
                                     <span className="message-time">
-                                        {new Date(msg.created_at).toLocaleTimeString(
-                                            [],
-                                            { hour: "2-digit", minute: "2-digit" }
-                                        )}
+                                        {new Date(msg.created_at).toLocaleTimeString([], {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                        })}
                                     </span>
                                     <span className={`message-status ${msg.status}`}>
                                         {msg.status === "sent" && "✓"}
