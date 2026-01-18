@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchChats, createChat } from "../api/chat.api";
+import { fetchChats, createChat, createGroupChat } from "../api/chat.api";
 import { searchUsers } from "../api/user.api";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
@@ -12,6 +12,29 @@ export default function Sidebar({ setActiveChat }) {
     const { auth } = useAuth();
     const { logout } = useAuth();
     const navigate = useNavigate();
+    const [showGroupModal, setShowGroupModal] = useState(false);
+    const [groupName, setGroupName] = useState("");
+    const [selectedUsers, setSelectedUsers] = useState([]);
+
+    async function createGroup() {
+        if (!groupName || selectedUsers.length === 0) {
+            alert("Group name and members required");
+            return;
+        }
+
+        try {
+            const res = await createGroupChat(groupName, selectedUsers);
+            setChats(prev => [res.data, ...prev]);
+            setActiveChat(res.data);
+
+            // reset
+            setShowGroupModal(false);
+            setGroupName("");
+            setSelectedUsers([]);
+        } catch (err) {
+            console.error("Group creation failed", err);
+        }
+    }
 
     useEffect(() => {
         fetchChats().then(res => setChats(res.data));
@@ -49,13 +72,13 @@ export default function Sidebar({ setActiveChat }) {
         }
     }
 
-    function logoutUser(){
-        try{
+    function logoutUser() {
+        try {
             let ans = confirm("Want to logout???");
-            if(ans){
+            if (ans) {
                 logout();
             }
-        } catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
@@ -64,6 +87,9 @@ export default function Sidebar({ setActiveChat }) {
         <div className="sidebar">
             <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h3 className="sidebar-title">Chats</h3>
+                <button className="group-btn" onClick={() => setShowGroupModal(true)}>
+                    + Group
+                </button>
                 <button className="logout-btn" onClick={logoutUser}>Logout</button>
             </div>
 
@@ -91,6 +117,41 @@ export default function Sidebar({ setActiveChat }) {
                             </div>
                         </div>
                     ))}
+                </div>
+            )}
+
+            {showGroupModal && (
+                <div className="group-modal">
+                    <h4>Create Group</h4>
+
+                    <input
+                        placeholder="Group name"
+                        value={groupName}
+                        onChange={e => setGroupName(e.target.value)}
+                        className="text-input"
+                    />
+
+                    <div className="group-users">
+                        {users.map(user => (
+                            <label key={user.id} className="group-user">
+                                <input
+                                    type="checkbox"
+                                    checked={selectedUsers.includes(user.id)}
+                                    onChange={() =>
+                                        setSelectedUsers(prev =>
+                                            prev.includes(user.id)
+                                                ? prev.filter(id => id !== user.id)
+                                                : [...prev, user.id]
+                                        )
+                                    }
+                                />
+                                {user.username}
+                            </label>
+                        ))}
+                    </div>
+
+                    <button className="group-btn" style={{ margin: '5px' }} onClick={createGroup}>Create</button>
+                    <button className="group-btn" onClick={() => setShowGroupModal(false)}>Cancel</button>
                 </div>
             )}
 

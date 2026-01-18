@@ -30,3 +30,11 @@ export const createChat = (otherUserId) => {
         }
     );
 };
+
+export const createGroupChat = (name, members) => {
+  return axios.post(
+    `${API}/chats/group`,
+    { name, members },
+    { headers: authHeaders() }
+  );
+};
