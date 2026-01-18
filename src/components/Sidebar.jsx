@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { fetchChats, createChat } from "../api/chat.api";
 import { searchUsers } from "../api/user.api";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate, Link } from "react-router-dom";
 import "./Sidebar.css"
 
 export default function Sidebar({ setActiveChat }) {
@@ -9,6 +10,8 @@ export default function Sidebar({ setActiveChat }) {
     const [search, setSearch] = useState("");
     const [users, setUsers] = useState([]);
     const { auth } = useAuth();
+    const { logout } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchChats().then(res => setChats(res.data));
@@ -46,10 +49,22 @@ export default function Sidebar({ setActiveChat }) {
         }
     }
 
+    function logoutUser(){
+        try{
+            let ans = confirm("Want to logout???");
+            if(ans){
+                logout();
+            }
+        } catch(error){
+            console.log(error);
+        }
+    }
+
     return (
         <div className="sidebar">
-            <div className="sidebar-header">
+            <div className="sidebar-header" style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <h3 className="sidebar-title">Chats</h3>
+                <button className="logout-btn" onClick={logoutUser}>Logout</button>
             </div>
 
             <div className="search-container">
