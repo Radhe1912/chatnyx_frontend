@@ -125,3 +125,25 @@
         transform: translateY(-2px);
     }
 }
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+  .chat-header {
+    height: 60px;
+    padding: 0 14px;
+  }
+
+  .chat-avatar-header {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .chat-title {
+    font-size: 15px;
+  }
+
+  .chat-status {
+    font-size: 11px;
+  }
+}

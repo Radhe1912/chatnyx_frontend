@@ -95,3 +95,27 @@
     cursor: not-allowed;
     background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
 }
+
+/* Add to existing MessageInput.css */
+@media (max-width: 768px) {
+  .message-input {
+    padding: 12px;
+    width: 100%;
+  }
+  
+  .input-container {
+    padding: 6px 10px;
+    width: 170px;
+  }
+  
+  .text-input {
+    padding: 8px 10px;
+    font-size: 16px;
+    width: 160px;
+  }
+  
+  .send-button {
+    padding: 8px 16px;
+    min-width: 70px;
+  }
+}

@@ -160,3 +160,19 @@
 .message-list::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
 }
+
+/* Add to existing MessageList.css */
+@media (max-width: 768px) {
+  .message-list {
+    padding: 10px;
+  }
+  
+  .message-bubble {
+    max-width: 80%;
+  }
+  
+  .message-image img {
+    max-width: 200px;
+    max-height: 200px;
+  }
+}

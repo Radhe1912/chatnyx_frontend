@@ -3,8 +3,19 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ChatPage from "./pages/ChatPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import { useEffect } from "react";
 
 export default function App() {
+  useEffect(() => {
+  const meta = document.createElement('meta');
+  meta.name = 'viewport';
+  meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no';
+  document.head.appendChild(meta);
+  
+  return () => {
+    document.head.removeChild(meta);
+  };
+}, []);
   return (
     <BrowserRouter>
       <Routes>
