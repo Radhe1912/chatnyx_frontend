@@ -9,13 +9,17 @@ export default function MessageList({ chatId }) {
     const { auth } = useAuth();
 
     const [messages, setMessages] = useState([]);
+    const [loading, setLoading] = useState(false);
     const bottomRef = useRef(null);
 
     useEffect(() => {
         if (!chatId || !socket) return;
 
+        setLoading(true);
         getMessagesByChat(chatId).then(res => {
             setMessages(res.data);
+        }).finally(() => {
+            setLoading(false);
         });
 
         socket.emit("join_chat", chatId);
@@ -84,6 +88,17 @@ export default function MessageList({ chatId }) {
     useEffect(() => {
         bottomRef.current?.scrollIntoView({ behavior: "smooth" });
     }, [messages]);
+
+    if (loading) {
+        return (
+            <div className="message-list">
+                <div className="loading-container">
+                    <div className="loading-spinner"></div>
+                    <p className="loading-text">Loading messages...</p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="message-list">
